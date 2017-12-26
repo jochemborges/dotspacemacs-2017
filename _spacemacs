@@ -118,15 +118,15 @@ values."
    ;; directory. A string value must be a path to an image format supported
    ;; by your Emacs build.
    ;; If the value is nil then no banner is displayed. (default 'official)
-   dotspacemacs-startup-banner 'official
+   dotspacemacs-startup-banner "~/r/dotfiles/statebox_logo.png"; 'official
    ;; List of items to show in startup buffer or an association list of
    ;; the form `(list-type . list-size)`. If nil then it is disabled.
    ;; Possible values for list-type are:
    ;; `recents' `bookmarks' `projects' `agenda' `todos'."
    ;; List sizes may be nil, in which case
    ;; `spacemacs-buffer-startup-lists-length' takes effect.
-   dotspacemacs-startup-lists '((recents . 5)
-                                (projects . 7))
+   dotspacemacs-startup-lists '((todos . 12)
+                                (projects . 12))
    ;; True if the home buffer should respond to resize events.
    dotspacemacs-startup-buffer-responsive t
    ;; Default major mode of the scratch buffer (default `text-mode')
@@ -231,11 +231,11 @@ values."
    dotspacemacs-fullscreen-at-startup nil
    ;; If non nil `spacemacs/toggle-fullscreen' will not use native fullscreen.
    ;; Use to disable fullscreen animations in OSX. (default nil)
-   dotspacemacs-fullscreen-use-non-native nil
+   dotspacemacs-fullscreen-use-non-native t
    ;; If non nil the frame is maximized when Emacs starts up.
    ;; Takes effect only if `dotspacemacs-fullscreen-at-startup' is nil.
    ;; (default nil) (Emacs 24.4+ only)
-   dotspacemacs-maximized-at-startup nil
+   dotspacemacs-maximized-at-startup t
    ;; A value from the range (0..100), in increasing opacity, which describes
    ;; the transparency level of a frame when it's active or selected.
    ;; Transparency can be toggled through `toggle-transparency'. (default 90)
@@ -267,7 +267,7 @@ values."
    ;;                       text-mode
    ;;   :size-limit-kb 1000)
    ;; (default nil)
-   dotspacemacs-line-numbers nil
+   dotspacemacs-line-numbers t
    ;; Code folding method. Possible values are `evil' and `origami'.
    ;; (default 'evil)
    dotspacemacs-folding-method 'evil
@@ -298,7 +298,7 @@ values."
    ;; `trailing' to delete only the whitespace at end of lines, `changed'to
    ;; delete only whitespace for changed lines or `nil' to disable cleanup.
    ;; (default nil)
-   dotspacemacs-whitespace-cleanup nil
+   dotspacemacs-whitespace-cleanup "changed"
    ))
 
 (defun dotspacemacs/user-init ()
@@ -309,21 +309,25 @@ executes.
 before packages are loaded. If you are unsure, you should try in setting them in
 `dotspacemacs/user-config' first."
 
+  ;;(push "~/.emacs.d/private/org-jira/" load-path)
+
   ;; disable curl call, use building https backend
   (require 'url)
+  ;;(require 'request)
   (setq request-backend 'url-retrieve)
 
+  (require 'jiralib)
+  (require 'org-jira)
+
   ;; show debug, cannot capture post data
-  (setq request-log-level 'debug)
-  (setq request-message-level 'debug)
-  (setq url-debug t)
+  ;;(setq request-log-level 'debug)
+  ;;(setq request-message-level 'debug)
+  ;;;(setq url-debug t)
 
   (setq jiralib-url "https://statebox.atlassian.net")
 
   ;; force usage of rest api
   (setq jiralib-use-restapi t)
-
-
 )
 
 (defun dotspacemacs/user-config ()
@@ -333,7 +337,7 @@ layers configuration.
 This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
-  
+
   ;; because the touchbar escape key is not a key, remap to `jj`
   ;; see https://hackmd.io/EwQwzAbArARgDCAtARhiA7IgLCEXEAcAprIghAGYHJgwVwzJA===
   (setq-default key-chord-two-keys-delay 0.2)
@@ -371,7 +375,7 @@ you should place your code here."
  '(evil-want-Y-yank-to-eol nil)
  '(package-selected-packages
    (quote
-    (rich-minority org-category-capture org-plus-contrib markdown-mode prop-menu projectile helm helm-core fringe-helper git-gutter+ git-gutter flyspell-correct seq pos-tip flycheck pkg-info epl magit magit-popup git-commit ghub let-alist with-editor f counsel swiper ivy s dash company rust-mode yasnippet alert log4e gntp avy auto-complete popup smart-mode-line web-beautify livid-mode skewer-mode simple-httpd json-mode json-snatcher json-reformat js2-refactor multiple-cursors js2-mode js-doc company-tern dash-functional tern coffee-mode org-gcal request-deferred deferred calfw-org calfw rainbow-mode org-jira key-chord ws-butler winum volatile-highlights vi-tilde-fringe uuidgen toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode paradox spinner org-bullets open-junk-file neotree move-text lorem-ipsum linum-relative link-hint info+ indent-guide hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation hide-comnt helm-themes helm-swoop helm-projectile helm-mode-manager helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido fill-column-indicator fancy-battery eyebrowse expand-region evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-ediff evil-args evil-anzu anzu eval-sexp-fu highlight dumb-jump define-word column-enforce-mode clean-aindent-mode auto-highlight-symbol aggressive-indent adaptive-wrap ace-link ace-jump-helm-line xterm-color which-key wgrep use-package unfill toml-mode smex smeargle shell-pop racer pcre2el orgit org-projectile org-present org-pomodoro org-download nix-mode mwim multi-term mmm-mode markdown-toc magit-gitflow macrostep ivy-hydra idris-mode htmlize help-fns+ helm-make gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe git-gutter-fringe+ gh-md fuzzy flyspell-correct-ivy flycheck-rust flycheck-pos-tip flycheck-elm flx exec-path-from-shell evil-visualstar evil-magit evil-escape eshell-z eshell-prompt-extras esh-help elm-mode elisp-slime-nav diminish diff-hl counsel-projectile company-statistics cargo bind-map auto-yasnippet auto-dictionary auto-compile ace-window ac-ispell))))
+    (rich-minority org-category-capture org-plus-contrib markdown-mode prop-menu projectile helm helm-core fringe-helper git-gutter+ git-gutter flyspell-correct seq pos-tip flycheck pkg-info epl magit magit-popup git-commit ghub let-alist with-editor f counsel swiper ivy s dash company rust-mode yasnippet alert log4e gntp avy auto-complete popup smart-mode-line web-beautify livid-mode skewer-mode simple-httpd json-mode json-snatcher json-reformat js2-refactor multiple-cursors js2-mode js-doc company-tern dash-functional tern coffee-mode org-gcal request-deferred deferred calfw-org calfw-mode org-jira key-chord ws-butler winum volatile-highlights vi-tilde-fringe uuidgen toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode paradox spinner org-bullets open-junk-file neotree move-text lorem-ipsum linum-relative link-hint info+ indent-guide hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation hide-comnt helm-themes helm-swoop helm-projectile helm-mode-manager helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido fill-column-indicator fancy-battery eyebrowse expand-region evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-ediff evil-args evil-anzu anzu eval-sexp-fu highlight dumb-jump define-word column-enforce-mode clean-aindent-mode auto-highlight-symbol aggressive-indent adaptive-wrap ace-link ace-jump-helm-line xterm-color which-key wgrep use-package unfill toml-mode smex smeargle shell-pop racer pcre2el orgit org-projectile org-present org-pomodoro org-download nix-mode mwim multi-term mmm-mode markdown-toc magit-gitflow macrostep ivy-hydra idris-mode htmlize help-fns+ helm-make gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe git-gutter-fringe+ gh-md fuzzy flyspell-correct-ivy flycheck-rust flycheck-pos-tip flycheck-elm flx exec-path-from-shell evil-visualstar evil-magit evil-escape eshell-z eshell-prompt-extras esh-help elm-mode elisp-slime-nav diminish diff-hl counsel-projectile company-statistics cargo bind-map auto-yasnippet auto-dictionary auto-compile ace-window ac-ispell))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
