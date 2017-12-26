@@ -60,7 +60,7 @@ values."
      org-jira
      key-chord
      smart-mode-line
-     rainbow-mode
+     rainbow-delimiters
      )
 
    ;; A list of packages that cannot be updated.
@@ -342,7 +342,7 @@ you should place your code here."
   (key-chord-mode t)
 
   ;; enable rainbow mode
-  (add-hook 'prog-mode-hook 'rainbow-mode)
+  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
 
   ;; change the mode line
   ;; (smart-mode-line-enable t)
